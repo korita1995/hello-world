@@ -1,0 +1,75 @@
+名前を設定
+$ git config --global user.name "<あなたの名前>"
+
+Eメールアドレスを設定
+$ git config --global user.email "<youremail@example.com(あなたのEメールアドレス)>"
+
+フォルダをGitリポジトリとして初期化する
+$ mkdir 'name'
+$ git init
+
+ファイルを作って変更をcommitできるようにする
+$ touch filename
+$ git add <FILENAME>
+
+変更を説明文とともにリポジトリの履歴として保存
+$ git commit -m '<commit message>'
+# 変更の度に行う
+
+最後にコミットした内容との差分を確認
+$ git diff
+# 終了は :q <Enter>
+
+リポジトリの変更ステータスを確認する
+$ git status
+
+変更すべてをいっぺんにAddする
+$ git add .
+
+GitHub のユーザー名をGitの設定に追加
+$ git config --global user.username <USerNamE> 
+
+ローカルにあるバージョンをGitHubのバージョンと同期
+# ローカルのリポジトリ名と一致する名前をつけたリポジトリを作成
+
+GitHubサーバ上にあるリモートバージョンの場所をGitに知らせる
+$ git remote add origin <URLFROMGITHUB>
+# <URLFROMGITHUB>はQuick setupのところに表示されたURL
+
+remoteの設定を追加する
+$ git remote add <REMOTENAME> <URL>
+メインのリモートサーバに対しては、通常originと名付けることが慣習となっている
+
+'''
+すでにあるremoteにURLを設定する
+$ git remote set-url <REMOTENAME> <URL>
+'''
+
+変更をPullする
+$ git pull <REMOTENAME> <BRANCHNAME>
+
+remoteの設定を確認する
+$ git remote -v
+
+変更をPush（送信）する
+$ git push <REMOTENAME> <BRANCH>
+# 最初のブランチはデフォルトでは'master'という名前がつけられている
+
+'''
+fork : あるリポジトリのコピーを自分のアカウントの下に作ること(GitHub上で行う)
+clone : GitHubでフォークしたプロジェクトを自分のPCにコピーすること
+# くれぐれも別のGitリポジトリのフォルダの中にこのリポジトリをクローンしないように注意！
+'''
+
+クローン
+$ cd .. # 別のGitリポジトリのフォルダの中にいた場合
+$ git clone <URLFROMGITHUB>
+
+元のリポジトリともつなぐ
+$ git remote add <REMOTENAME> <元のリポジトリのURL>
+# remoteのところは慣例的にupstreamと名付けることが多い
+
+
+
+
+
