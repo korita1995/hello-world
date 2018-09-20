@@ -16,6 +16,9 @@ $ git add <FILENAME>
 $ git commit -m '<commit message>'
 # 変更の度に行う
 
+変更点を自動的にaddしてcommit
+$ git commit -a <FILENAME> '<commit message>' 
+
 最後にコミットした内容との差分を確認
 $ git diff
 # 終了は :q <Enter>
