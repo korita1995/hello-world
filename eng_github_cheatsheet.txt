@@ -1,0 +1,131 @@
+# set your name
+$ git config --global user.name <YOURNAME>
+
+# set your email-address
+$ git config --global user.email <youremail@example.com>
+
+# set your GitHub name
+$ git config --global user.username <UserName> 
+
+# initialize current directory as Git repository
+$ mkdir <DIRNAME>
+$ git init
+
+# add file
+$ touch <FILENAME>
+$ git add <FILENAME>
+
+# save changes in added file as repository history with explanation
+$ git commit -m '<commit message>'
+
+# add all changes and commmit
+$ git commit -a 
+
+# check difference
+$ git diff
+# to finish,  :q + <Enter>
+
+# check changes in the directory
+$ git status
+
+# add all files and changes
+$ git add .
+
+# link local version with GitHub version
+# (after makinig GitHub repository same as your local directory name)
+# <URLFROMGITHUB> is the URL of your Github repository
+# conventionally, call the main remote server as origin
+$ git remote add origin <URLFROMGITHUB>
+
+'''
+# set URL in already existing remote
+$ git remote set-url <REMOTENAME> <URL>
+'''
+
+# check the remote configuretion
+$ git remote -v
+
+# push changes in local directory to GitHub 
+$ git push <REMOTENAME> <BRANCH>
+# 最初のブランチはデフォルトでは'master'という名前がつけられている
+
+'''
+fork : あるリポジトリのコピーを自分のアカウントの下に作ること(GitHub上で行う)
+clone : GitHubでフォークしたプロジェクトを自分のPCにコピーすること
+# くれぐれも別のGitリポジトリのフォルダの中にこのリポジトリをクローンしないように注意！
+'''
+
+クローン
+$ cd .. # 別のGitリポジトリのフォルダの中にいた場合
+$ git clone <URLFROMGITHUB>
+
+元のリポジトリともつなぐ
+$ git remote add <REMOTENAME> <元のリポジトリのURL>
+# remoteのところは慣例的にupstreamと名付けることが多い
+
+
+'''
+branch : 隔離された作業環境をつくること。メインのブランチ（通常はmaster）を安全な状態に保ちつつ作業できる
+	  他の人との作業を別のブランチで行い保存し、作業が終わって準備が整ったらブランチをmasterにマージすればいい
+'''
+
+ブランチの新規作成
+$ git branch <BRANCHNAME>
+
+ブランチの切り替え
+$ git checkout <BRANCHNAME>
+
+ブランチを一覧する
+$ git branch
+
+いまいるブランチの名前を変更する
+$ git branch -m <NEWBRANCHNAME>
+
+ブランチを作るのと同時にブランチを切り替え
+$ git checkout -b <BRANCHNAME>
+
+ローカルのブランチの名前を変更
+$ git branch -m <元の名前> <変更したい名前>
+$ git push origin :<元の名前> #リモートのブランチを削除
+$ git push origin <変更したい名前>
+
+
+'''
+コラボレーター : GitHubのユーザーでかつ誰かのリポジトリにアクセスして編集することが許された権限を持つ人たちのこと
+		GitHubのリポジトリのページに行って、'Settings'をクリック
+		その後'Collaborators'タブを選択
+		追加したいユーザー名を入力して、'Add'をクリック
+'''
+リモートのブランチから変更をPullする
+$ git pull <REMOTENAME> <REMOTEBRANCH>
+
+Pullする前にリモート上で行われた変更を見てみる
+$ git fetch --dry-run
+
+
+'''
+pull request : フォークしたリポジトリに変更や改善を加えたら、それらの変更を元のリポジトリのメンテナーに対して、変更を元のリポジトリにpullして欲しいというrequest を送ること
+'''
+
+# 元のリポジトリにアクセス
+# 変更が入っている自身で作成したブランチを選択
+# Create pull requestを押す
+# 元リポジトリのオーナーにPullしてもらうために、変更の内容がわかりやすいようにtitleとdescriptionを書きます
+# Send pull request をクリック
+
+
+あるブランチを今いるブランチにマージする
+$ git merge <BRANCHNAME>
+
+ブランチを切り替える
+$ git checkout <BRANCHNAME>
+
+ローカルのブランチを消す
+$ git branch -d <BRANCHNAME>
+
+リモートのブランチを消す
+$ git push <REMOTENAME> --delete <BRANCHNAME>
+
+リモートブランチをPullする
+$ git pull <REMOTENAME> <BRANCHNAME>
+
