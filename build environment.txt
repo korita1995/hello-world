@@ -60,3 +60,18 @@ $ echo 'export PATH="$PYENV_ROOT/versions/anaconda3-5.0.1/bin/:$PATH"' >> ~/.bas
 $ echo 'export PYENV_VIRTUALENV_DISABLE_PROMPT=1' >> ~/.bashrc #anacondaのバージョンをプロンプトに表示させない
 $ exec $SHELL -l
 
+## python ライブラリのインストール
+$ pip install --upgrade pip
+$ pip install umap-learn
+$ pip install slackclient
+$ pip install impyute
+$ pip install opencv-python
+$ pip install mlxtend
+
+## setup.pyがないリポジトリのダウンロード先(pythonライブラリ)
+$ mkdir ~/Documents/pythonlibs
+$ echo 'export PYTHONPATH="home/<ユーザー名>/Documents/pythonlibs/:$PYTHONPATH"' >> ~/.bashrc
+#絶対パスで指定しないといけない(？)
+$ cd ~/Documents/pythonlibs
+$ git clone <ダウンロードしたいリポジトリのリンク.git>
+
