@@ -1,0 +1,62 @@
+### 使用OS: CentOS 7.6
+
+## 1. sudo 権限の追加のやり方
+$ su - root
+$ visudo #実行によりsudoersファイルを開ける
+'''
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+'''
+↑rootの行の下に以下の1行を追加する
+ユーザー名    ALL=(ALL)       ALL
+
+$ exit # rootモードからログアウト
+
+## 2. NTFSフォーマットのデバイスのマウント
+$ sudo yum install epel-release
+$ sudo yum -y install ntfs-3g
+$ sudo mount /dev/disk/hoge /mnt/hogehoge
+
+## 3. Emacs 26.2 の導入
+$ sudo yum -y install ncurses-devel gnutls-devel make
+$ cd /usr/local/src/
+$ sudo wget http://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-26.2.tar.gz
+# 2019/5/27時点での最新版
+$ sudo tar zxvf emacs-26.2.tar.gz
+$ cd emacs-26.2/
+$ ./configure --without-x --with-mailutils
+$ make
+$ sudo make install
+$ sudo rm -f ../emacs-26.2.tar.gz
+
+## 4.HDDのバックアップ
+$ sudo dd if=/dev/hoge | gzip -c > /run/media/hoge/hogehoge.img.gz #圧縮しながらバックアップ
+$ sudo gzip -dc < /run/media/hoge/hogehoge.img.gz | dd of=/dev/hoge #解凍
+
+## 5. pyenvでAnacnoda環境の構築(anaconda3-5.0.1)
+$ curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+'''
+WARNING: seems you still have not added 'pyenv' to the load path.
+# Load pyenv automatically by adding
+# the following to ~/.bashrc:
+
+export PATH="~/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+'''
+↑以上のようなメッセージが出るので、~/.bashrcファイルに追記する($ echo '' >> ~/.bashrcを使用)
+$ echo 'export PATH="~/.pyenv/bin:$PATH"' >> ~/.bashrc
+$ echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+$ echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+$ exec $SHELL -l #.bashrc変更内容を起動したシェルへ反映
+$ pyenv update
+$ pyenv install -l | grep anaconda #anacondaに絞ってインストール可能なバージョンを検索
+$ pyenv install anaconda3-5.0.1 
+# tensorflow_gpu 1.3.1 に対応しているPython3.6.3が入っている。
+# 最新版だと>3.7のため、tensorflowが使えない(2019/5/27時点)
+$ pyenv global anaconda3-5.0.1
+$ python -V # バージョンが3.6.3になっていることを確認
+$ echo 'export PATH="$PYENV_ROOT/versions/anaconda3-5.0.1/bin/:$PATH"' >> ~/.bashrc
+$ echo 'export PYENV_VIRTUALENV_DISABLE_PROMPT=1' >> ~/.bashrc #anacondaのバージョンをプロンプトに表示させない
+$ exec $SHELL -l
+
