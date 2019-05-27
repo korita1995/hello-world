@@ -60,6 +60,54 @@ $ echo 'export PATH="$PYENV_ROOT/versions/anaconda3-5.0.1/bin/:$PATH"' >> ~/.bas
 $ echo 'export PYENV_VIRTUALENV_DISABLE_PROMPT=1' >> ~/.bashrc #anacondaのバージョンをプロンプトに表示させない
 $ exec $SHELL -l
 
+## 6. homeディレクトリ直下のディレクトリを日本語から英語に変更
+#ダウンロード、テンプレート、デスクトップなどになっている場合
+$ LANG=C xdg-user-dirs-gtk-update
+
+## 7. Nvidia driverのダウンロード
+# 2019/5/27時点で最新版のdriver
+# 使用しているGPU: GeForce GTX 1070
+# GPUの種類によってダウンロードするドライバーは違う
+# Nvidia社のGPUを使用していることが前提
+$ lspci | grep -i nvidia #GPUの確認
+$ sudo yum install -y kernel-devel kernel-headers gcc make git pciutils tmux
+$ lsmod | grep nouveau # デフォルトでインストールされているnouveauの存在を確認
+$ sudo su
+$ mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
+$ dracut --omit-drivers nouveau /boot/initramfs-$(uname -r).img $(uname -r)
+$ echo 'blacklist nouveau' >> /etc/modprobe.d/modprobe.conf
+$ echo 'blacklist nouveau' >> /etc/modprobe.d/nouveau_blacklist.conf
+$ reboot
+# 再起動後
+$ lsmod | grep nouveau # nouveauが存在しないことを確認
+# https://www.nvidia.co.jp/Download/index.aspx?lang=jpからドライバーをダウンロード
+# Linux x64 (AMD64/EM64T) Display Driverのバージョン 430.14 (2019/5/14リリース)
+$ cd ~/tmp
+$ wget https://www.nvidia.co.jp/content/DriverDownload-March2009/confirmation.php?url=/XFree86/Linux-x86_64/430.14/NVIDIA-Linux-x86_64-430.14.run&lang=jp&type=TITAN
+# 以下のコマンドを実行すると強制的にシングルユーザーモード (CUIでの操作しかできない)に移行するため、事前にユーザー名とパスワードを覚えておくこと！
+$ sudo init 3
+# シングルユーザーモードに移行後
+$ sudo systemctl stop nvidia-driver # 万が一nvidiaドライバーが起動していた場合は停止しておく
+$ sudo bash /tmp/NVIDIA_Linux-x86_64-430.14.run
+# 以降は指示に従う
+1. Install NVIDIA's 32-bit compatibility libraries?
+# 32-bitと64-bitのライブラリを混合させていないなら不要 
+> No
+'''
+2. An incomplete installation of libglvnd was found. All of the essential libglvnd libraries are present, but one or more optional components are missing. Do you want to install a full copy of libglvnd? This will overwrite any existing libglvnd libraries.
+> Install and overwrite existing files
+'''
+3. Would you like to run the nvidia-xconfig utility to automatically update your X configuration file so that NVIDIA X driver will be used when you restart X? Any pre-existing X configuration file will be backed up.
+> Yes
+4. Your configuration file has been successufully updated. Installation of the NVIDIA Accelarated Graphics Driver for Linux _x86_64 (version : 430.14) is now complete.
+> Yes
+$ reboot
+# 再起動後
+$ nvidia-smi # GPUが認識されていることを確認
+# 右上にある、対応しているCUDAのバージョンの最新版を確認(それ以下のバージョンのCUDAならどれでもOKという意味)
+
+## 8. CUDA, CuDNNのダウンロード
+
 ## python ライブラリのインストール
 $ pip install --upgrade pip
 $ pip install umap-learn
@@ -74,4 +122,6 @@ $ echo 'export PYTHONPATH="home/<ユーザー名>/Documents/pythonlibs/:$PYTHONP
 #絶対パスで指定しないといけない(？)
 $ cd ~/Documents/pythonlibs
 $ git clone <ダウンロードしたいリポジトリのリンク.git>
+e.g. Robust Continuous Clusteringのリポジトリのダウンロード
+$ git clone https://github.com/yhenon/pyrcc.git
 
