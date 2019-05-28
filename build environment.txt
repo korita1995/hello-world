@@ -64,7 +64,7 @@ $ exec $SHELL -l
 #ダウンロード、テンプレート、デスクトップなどになっている場合
 $ LANG=C xdg-user-dirs-gtk-update
 
-## 7. Nvidia driverのダウンロード
+## 7. NVIDIA driverのinstall
 # 2019/5/27時点で最新版のdriver
 # 使用しているGPU: GeForce GTX 1070
 # GPUの種類によってダウンロードするドライバーは違う
@@ -85,19 +85,16 @@ $ lsmod | grep nouveau # nouveauが存在しないことを確認
 $ cd /tmp
 $ wget https://www.nvidia.co.jp/content/DriverDownload-March2009/confirmation.php?url=/XFree86/Linux-x86_64/430.14/NVIDIA-Linux-x86_64-430.14.run&lang=jp&type=TITAN
 # 以下のコマンドを実行すると強制的にシングルユーザーモード (CUIでの操作しかできない)に移行するため、事前にユーザー名とパスワードを覚えておくこと！
-$ mv confirmation.php\?url\=%2FXFree86%2FLinux-x86_64%2F430.14%2FNVIDIA-Linux-x86_64-430.14.run 430.14.run
 $ sudo init 3
 # シングルユーザーモードに移行後
 $ sudo systemctl stop nvidia-driver # 万が一nvidiaドライバーが起動していた場合は停止しておく
-$ sudo bash /tmp/430.14.run
+$ sudo bash /tmp/NVIDIA_Linux-x86_64-430.14.run
 # 以降は指示に従う
 1. Install NVIDIA's 32-bit compatibility libraries?
 # 32-bitと64-bitのライブラリを混合させていないなら不要 
 > No
-'''1をNOにしたら多分でない
 2. An incomplete installation of libglvnd was found. All of the essential libglvnd libraries are present, but one or more optional components are missing. Do you want to install a full copy of libglvnd? This will overwrite any existing libglvnd libraries.
 > Install and overwrite existing files
-'''
 3. Would you like to run the nvidia-xconfig utility to automatically update your X configuration file so that NVIDIA X driver will be used when you restart X? Any pre-existing X configuration file will be backed up.
 > Yes
 4. Your configuration file has been successufully updated. Installation of the NVIDIA Accelarated Graphics Driver for Linux _x86_64 (version : 430.14) is now complete.
@@ -107,17 +104,49 @@ $ reboot
 $ nvidia-smi # GPUが認識されていることを確認
 # 右上にある、対応しているCUDAのバージョンの最新版を確認(それ以下のバージョンのCUDAならどれでもOKという意味)
 
-## 8. CUDA, CuDNNのダウンロード
+## 8. CUDA-10.0 のinstall
+$ pip install tensorflow-gpu==1.13.1
+$ cd ~/Downloads
+$ wget https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda-repo-rhel7-10-0-local-10.0.130-410.48-1.0-1.x86_64
+$ sudo rpm -ivh cuda-repo-rhel7-10-0-local-10.0.130-410.48-1.0-1.x86_64
+$ wget http://developer.download.nvidia.com/compute/cuda/10.0/Prod/patches/1/cuda-repo-rhel7-10-0-local-nvjpeg-update-1-1.0-1.x86_64.rpm
+$ sudo rpm -ivh cuda-repo-rhel7-10-0-local-nvjpeg-update-1-1.0-1.x86_64.rpm
+$ sudo yum clean all
+$ sudo yum install cuda
+$ echo 'export PATH="/usr/local/cuda-10.0/bin:$PATH"' >> ~/.bashrc
+$ echo 'export LD_LIBRARY_PATH="/usr/local/cuda-10.0/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
+$ exec $SHELL -l
+$ nvcc -V # CUDAのバージョン確認
 
-## python ライブラリのインストール
+## 9. CuDNN-7.4.2 のinstall
+$ cd ~/Downloads
+$ wget https://developer.download.nvidia.com/compute/machine-learning/repos/rhel7/x86_64/libcudnn7-7.4.2.24-1.cuda10.0.x86_64.rpm
+$ wget https://developer.download.nvidia.com/compute/machine-learning/repos/rhel7/x86_64/libcudnn7-devel-7.4.2.24-1.cuda10.0.x86_64.rpm
+$ sudo rpm -ivh libcudnn7-7.4.2.24-1.cuda10.0.x86_64.rpm
+$ sudo rpm -ivh libcudnn7-devel-7.4.2.24-1.cuda10.0.x86_64.rpm
+$ sudo cp -i /usr/include/cudnn.h /usr/local/cuda/include/
+# or $ sudo cp -i /usr/include/cudnn.h /usr/local/cuda-10.0/include/
+$ sudo cp -i /etc/alternatives/libcudnn* /usr/local/cuda/lib64/
+# or $ sudo cp -i /etc/alternatives/libcudnn* /usr/local/cuda-10.0/lib64/
+$ ipython
+> import tensorflow # CUDAとCuDNNが認識されていることを確認
+> exit
+
+## 10. 有用なpython ライブラリのインストール
 $ pip install --upgrade pip
-$ pip install umap-learn
-$ pip install slackclient
-$ pip install impyute
-$ pip install opencv-python
-$ pip install mlxtend
+$ pip install umap-learn # Uniform Manifold Approximation and Projectionによる次元削減
+$ pip install slackclient # slackと連携
+$ pip install impyute # 多重代入法による欠損値補完
+$ pip install opencv-python # opencvによる画像処理
+$ pip install mlxtend # SVMの分類境界可視化など
+$ pip install cupy chainer # Chainerによるdeep learning
+$ pip install keras # Kerasによるdeep learning
+$ pip install optuna # ハイパーパラメータ最適化
+# PyTorchによるdeep learning
+$ pip3 install https://download.pytorch.org/whl/cu100/torch-1.1.0-cp36-cp36m-linux_x86_64.whl
+$ pip3 install https://download.pytorch.org/whl/cu100/torchvision-0.3.0-cp36-cp36m-linux_x86_64.whl
 
-## setup.pyがないリポジトリのダウンロード先(pythonライブラリ)
+## 11. PyPiに存在しないリポジトリのダウンロード先(pythonライブラリ)
 $ mkdir ~/Documents/pythonlibs
 $ echo 'export PYTHONPATH="home/<ユーザー名>/Documents/pythonlibs/:$PYTHONPATH"' >> ~/.bashrc
 #絶対パスで指定しないといけない(？)
