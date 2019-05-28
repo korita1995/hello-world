@@ -85,10 +85,11 @@ $ lsmod | grep nouveau # nouveauが存在しないことを確認
 $ cd /tmp
 $ wget https://www.nvidia.co.jp/content/DriverDownload-March2009/confirmation.php?url=/XFree86/Linux-x86_64/430.14/NVIDIA-Linux-x86_64-430.14.run&lang=jp&type=TITAN
 # 以下のコマンドを実行すると強制的にシングルユーザーモード (CUIでの操作しかできない)に移行するため、事前にユーザー名とパスワードを覚えておくこと！
+$ mv confirmation.php\?url\=%2FXFree86%2FLinux-x86_64%2F430.14%2FNVIDIA-Linux-x86_64-430.14.run 430.14.run
 $ sudo init 3
 # シングルユーザーモードに移行後
 $ sudo systemctl stop nvidia-driver # 万が一nvidiaドライバーが起動していた場合は停止しておく
-$ sudo bash /tmp/NVIDIA_Linux-x86_64-430.14.run
+$ sudo bash /tmp/430.14.run
 # 以降は指示に従う
 1. Install NVIDIA's 32-bit compatibility libraries?
 # 32-bitと64-bitのライブラリを混合させていないなら不要 
