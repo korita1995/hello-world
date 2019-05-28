@@ -82,7 +82,7 @@ $ reboot
 $ lsmod | grep nouveau # nouveauが存在しないことを確認
 # https://www.nvidia.co.jp/Download/index.aspx?lang=jpからドライバーをダウンロード
 # Linux x64 (AMD64/EM64T) Display Driverのバージョン 430.14 (2019/5/14リリース)
-$ cd ~/tmp
+$ cd /tmp
 $ wget https://www.nvidia.co.jp/content/DriverDownload-March2009/confirmation.php?url=/XFree86/Linux-x86_64/430.14/NVIDIA-Linux-x86_64-430.14.run&lang=jp&type=TITAN
 # 以下のコマンドを実行すると強制的にシングルユーザーモード (CUIでの操作しかできない)に移行するため、事前にユーザー名とパスワードを覚えておくこと！
 $ sudo init 3
@@ -93,7 +93,7 @@ $ sudo bash /tmp/NVIDIA_Linux-x86_64-430.14.run
 1. Install NVIDIA's 32-bit compatibility libraries?
 # 32-bitと64-bitのライブラリを混合させていないなら不要 
 > No
-'''
+'''1をNOにしたら多分でない
 2. An incomplete installation of libglvnd was found. All of the essential libglvnd libraries are present, but one or more optional components are missing. Do you want to install a full copy of libglvnd? This will overwrite any existing libglvnd libraries.
 > Install and overwrite existing files
 '''
