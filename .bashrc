@@ -14,6 +14,9 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 export PATH="$PYENV_ROOT/versions/anaconda3-5.0.1/bin/:$PATH"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+export PYTHONPATH="home/korita/Documents/pythonlibs/:$PYTHONPATH"
+export PATH="/usr/local/cuda-10.0/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/local/cuda-10.0/lib64:$LD_LIBRARY_PATH"
 
 # just processed in non-login shells
 if [ ! -n "$SSH_CLIENT" -o -n "$SSH_TTY" ] ; then
