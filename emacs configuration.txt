@@ -1,72 +1,12 @@
 $ touch ~/.emacs.d/init.el
 $ mkdir ~/.emacs.d/elisp
-$ cat <<EOS > ~/.emacs.d/init.el
-;; Package System ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                                                                                                                      
-;; パッケージの保存先の指定                                                                                                                                                                                        
-(setq package-user-dir "~/.emacs.d/elisp/")
-(package-initialize)
-(setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
-        ("melpa" . "https://melpa.org/packages/")
-        ("melpa-stable" . "https://stable.melpa.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                                                                                                                      
-
-;; Elisp ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                                                                                                         
-;; load-path を設定                                                                                                                                                                                                
-(setq load-path (cons "~/.emacs.d/elisp" load-path))
-
-;;; 表示設定                                                                                           
-;; スタート時のスプラッシュ非表示                                                                      
-(setq inhibit-startup-message t)
-;; アラートのベルはうるさいので消す                                                                    
-(setq ring-bell-function 'ignore)
-;; 表示領域を確保したいのでツールバーは非表示                                                          
-(if window-system
-    (tool-bar-mode 0))
-;; メニューバーを非表示に                                                                              
-(menu-bar-mode 0)
-;; line numberの表示                                                                                   
-(global-linum-mode 1)
-;; 対応する括弧をハイライト                                                                            
-(show-paren-mode 1)
-;; current directory 表示                                                                              
-(let ((ls (member 'mode-line-buffer-identification
-                  mode-line-format)))
-  (setcdr ls
-    (cons '(:eval (concat " ("
-            (abbreviate-file-name default-directory)
-            ")"))
-          (cdr ls))))
-
-;; スクロールは1行ごとに                                                                               
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 5)))
-
-;; スクロールの加速をやめる                                                                            
-(setq mouse-wheel-progressive-speed nil)
-
-;; タブにスペースを使用する                                                                            
-(setq-default tab-width 4
-              indent-tabs-mode nil)
-
-;;; キーバインド                                                                                         
-;; C-h をバックスペースに当てる                                                                          
-(global-set-key "\C-h" 'delete-backward-char)
-;; C-t をウィンドウの移動に当てる                                                                        
-(define-key global-map (kbd "C-t") 'other-window)
-
-;; "yes or no" の選択を "y or n" にする                                                                  
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; 補完時に大文字小文字を区別しない                                                                      
-(setq completion-ignore-case t)
-
-(set-default-coding-systems 'utf-8) ; utf-8 にする                                                       
-(prefer-coding-system 'utf-8)
-EOS
 
 # packageのインストール
 M-x package-refresh-contents 
 
-
+M-x package-install
+> python-mode
+> whitespace
+> magit
+> auto-complete
+> wdired
