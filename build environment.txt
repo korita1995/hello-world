@@ -81,6 +81,7 @@ $ exec $SHELL -l
 #ダウンロード、テンプレート、デスクトップなどになっている場合
 $ LANG=C xdg-user-dirs-gtk-update
 
+
 ## 7. NVIDIA driverのinstall
 # 2019/5/27時点で最新版のdriver
 # 使用しているGPU: GeForce GTX 1070
@@ -97,6 +98,9 @@ $ echo 'blacklist nouveau' >> /etc/modprobe.d/nouveau_blacklist.conf
 $ reboot
 # 再起動後
 $ lsmod | grep nouveau # nouveauが存在しないことを確認
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+CUDA toolkitにもNVIDIAドライバーが内包されているため、segmentation faultを起こして起動しなくなってしまう。
+CUDAを使うなら、先にドライバーをインストールするのは絶対にやってはいけない！
 # https://www.nvidia.co.jp/Download/index.aspx?lang=jpからドライバーをダウンロード
 # Linux x64 (AMD64/EM64T) Display Driverのバージョン 430.14 (2019/5/14リリース)
 $ cd /tmp
@@ -120,6 +124,7 @@ $ reboot
 # 再起動後
 $ nvidia-smi # GPUが認識されていることを確認
 # 右上にある、対応しているCUDAのバージョンの最新版を確認(それ以下のバージョンのCUDAならどれでもOKという意味)
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 ## 8. CUDA-10.0 のinstall
 $ pip install tensorflow-gpu==1.13.1
