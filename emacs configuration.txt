@@ -50,6 +50,20 @@ $ cat <<EOS > ~/.emacs.d/init.el
 (setq-default tab-width 4
               indent-tabs-mode nil)
 
+;;; キーバインド                                                                                         
+;; C-h をバックスペースに当てる                                                                          
+(global-set-key "\C-h" 'delete-backward-char)
+;; C-t をウィンドウの移動に当てる                                                                        
+(define-key global-map (kbd "C-t") 'other-window)
+
+;; "yes or no" の選択を "y or n" にする                                                                  
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; 補完時に大文字小文字を区別しない                                                                      
+(setq completion-ignore-case t)
+
+(set-default-coding-systems 'utf-8) ; utf-8 にする                                                       
+(prefer-coding-system 'utf-8)
 EOS
 
 # packageのインストール
