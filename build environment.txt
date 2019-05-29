@@ -140,6 +140,44 @@ $ echo 'export LD_LIBRARY_PATH="/usr/local/cuda-10.0/lib64:$LD_LIBRARY_PATH"' >>
 $ exec $SHELL -l
 $ nvcc -V # CUDAのバージョン確認
 
+## 8.5 NVIDIAドライバーを入れた後にCUDAを入れてしまい、起動しなくなってしまった場合の対処法
+# シングルユーザーモードでログインする
+# カーネルを選択する際に「e」を押し、linuxで始まる行の最後にsingleを追記して、Ctrl+x
+$ nvidia-smi
+# NVML: Driver/library version mismatchが表示されるはず（異なるバージョンのドライバが存在するため）
+$ dmesg # segmentation faultを起こしていることを確認
+$ rpm -qa | grep nvidia
+$ rpm -qa | grep cuda
+# 二つのコマンドで出て来るライブラリを全てsudo yum remove <PKGNAME>で削除
+# 残っている場合があるため、全て消えたことを確認する
+$ cd ~/Downloads
+$ sudo rpm -ivh cuda-repo-rhel7-10-0-local-nvjpeg-update-1-1.0-1.x86_64.rpm
+$ sudo yum clean all
+# シングルユーザーモードだとネットワーク接続されていないため、先に/etc/sysconfig/network-scripts/ifcfg-enp10s0ファイルを編集する
+# Ethernetで接続する場合（wifiだと設定方法違うかも？）
+$ sudo vi /etc/sysconfig/network-scripts/ifcfg-enp10s0
+'''
+# ファイルの末尾に以下の2行を追記する
+DNS1=<プライマリーDNSサーバーアドレス>
+DNS2=<セカンダリーDNSサーバーアドレス>
+'''
+$ sudo systemctl restart network.service
+$ curl ifconfig.co # グローバルIPアドレスが表示される（ネットワークに接続されていることを意味する）
+$ sudo yum install cuda
+$ echo 'export PATH="/usr/local/cuda-10.0/bin:$PATH"' >> ~/.bashrc
+$ echo 'export LD_LIBRARY_PATH="/usr/local/cuda-10.0/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
+$ exec $SHELL -l
+$ nvcc -V # CUDAのバージョン確認
+$ cd <NVIDIAドライバーを保存したディレクトリ>
+$ sudo bash NVIDIA_Linux-x86_64-430.14.run --uninstall
+$ reboot #シングルユーザーモードを終了して再起動する
+'''
+# 多分これで再起動できるはず。もしかしたらinitial ramdisk imageを再構成する必要があるかも？
+$ ls -l /boot/initramfs-$(uname -r).img* # 修復したいカーネルを見つける
+$ dracut -f /boot/initramfs-$(uname -r).img $(uname -r)
+'''
+$ nvidia-smi # CUDAのバージョンに対応するNVIDIAドライバーが存在することを確認
+
 ## 9. CuDNN-7.4.2 のinstall
 $ cd ~/Downloads
 $ wget https://developer.download.nvidia.com/compute/machine-learning/repos/rhel7/x86_64/libcudnn7-7.4.2.24-1.cuda10.0.x86_64.rpm
