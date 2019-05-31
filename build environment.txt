@@ -226,3 +226,10 @@ $ cd arduino-1.8.9/
 $ sudo ./install.sh
 $ echo 'alias ard="~/Downloads/arduino-1.8.9/arduino"'>> ~/.bashrc #ardだけでArduinoを実行できるように設定
 $ exec $SHELL -l
+
+## 13. ImageJ Fijiの導入
+$ cd ~/Downloads
+$ wget https://downloads.imagej.net/fiji/latest/fiji-linux64.zip
+$ unzip fiji-linux64.zip
+$ echo 'alias imj="~/Downloads/Fiji.app/ImageJ-linux64 %F"'>> ~/.bashrc #imjだけでImageJを実行できるように設定
+$ exec $SHELL -l
