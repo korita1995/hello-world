@@ -1,4 +1,4 @@
-### 使用OS: CentOS 7.6
+### 使用OS: CentOS 7.6 64-bit
 
 ## 0. GUIでの設定事項
 # かな漢字と英語を入力できるようにする
@@ -34,17 +34,19 @@ $ sudo yum install epel-release
 $ sudo yum -y install ntfs-3g
 $ sudo mount /dev/disk/hoge /mnt/hogehoge
 
-## 3. Emacs 26.2 の導入
+## 3. Emacs の導入
 $ sudo yum -y install ncurses-devel gnutls-devel make
 $ cd /usr/local/src/
-$ sudo wget http://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-26.2.tar.gz
-# 2019/5/27時点での最新版
-$ sudo tar zxvf emacs-26.2.tar.gz
-$ cd emacs-26.2/
-$ ./configure --without-x --with-mailutils
+# 2019/5/27時点での最新版は26.2
+# term+.elなどが正常に動作しないため、24.3に変更
+$ sudo wget http://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-24.3.tar.gz
+$ sudo tar zxvf emacs-24.3.tar.gz
+$ cd emacs-24.3/
+$ ./configure --without-x # 26.3 の場合は--with-mailutils も追加
 $ make
 $ sudo make install
-$ sudo rm -f ../emacs-26.2.tar.gz
+$ sudo rm -f ../emacs-24.3.tar.gz
+# uninstall したいときは、emacs-24.3/直下で $ sudo make uninstall
 
 ## 4.HDDのバックアップ
 $ sudo dd if=/dev/hoge | gzip -c > /run/media/hoge/hogehoge.img.gz #圧縮しながらバックアップ
@@ -215,3 +217,12 @@ $ git clone <ダウンロードしたいリポジトリのリンク.git>
 e.g. Robust Continuous Clusteringのリポジトリのダウンロード
 $ git clone https://github.com/yhenon/pyrcc.git
 
+## 12. Arduino IDEの導入
+$ cd ~/Downloads
+# https://www.arduino.cc/en/Main/Donate から最新版をダウンロードする
+# 2019/5/31現在で1.8.9が最新版
+$ tar Jxfv arduino-1.8.9-linux64.tar.xz
+$ cd arduino-1.8.9/
+$ sudo ./install.sh
+$ echo 'alias ard="~/Downloads/arduino-1.8.9/arduino"'>> ~/.bashrc #ardだけでArduinoを実行できるように設定
+$ exec $SHELL -l
