@@ -233,3 +233,35 @@ $ wget https://downloads.imagej.net/fiji/latest/fiji-linux64.zip
 $ unzip fiji-linux64.zip
 $ echo 'alias imj="~/Downloads/Fiji.app/ImageJ-linux64 %F"'>> ~/.bashrc #imjだけでImageJを実行できるように設定
 $ exec $SHELL -l
+
+## 14. Fritzingの導入
+# fritzing-0.9.2b-18.fc30.src.rpmをダウンロード
+# Ubuntuの場合は公式HPにある通りの手順でやればインストールできるはず（未確認）
+$ sudo yum install qt5-qtbase-devel
+$sudo yum install qt5-qtserialport-devel
+# 上手くいかなかったら下を実行する？
+'''
+sudo rpm -ivh qt5-qtserialport-devel-5.11.3-1.fc29.x86_64.rpm
+sudo yum -y install dnf
+sudo dnf --refresh install qt5-qtserialport-devel
+'''
+$ sudo yum install qt5-qtsvg-devel
+$ sudo yum install -y quazip-qt5-devel
+$ sudo rpmbuild --rebuild fritzing-0.9.2b-18.fc30.src.rpm #ダウンロードしたディレクトリで実行する
+$ sudo find / -name '*fritzing*' # rpmファイルがある場所を探す
+$ sudo yum install -y google-droid-sans-fonts google-droid-sans-mono-fonts
+$ sudo touch /etc/yum.repos.d/naulinux-school.repo
+$ vi /etc/yum.repos.d/naulinux-school.repo
+# 以下を書き込む。終了時は「:w !sudo tee %」
+'''
+[naulinux-school]
+name=NauLinux School
+baseurl=http://downloads.naulinux.ru/pub/NauLinux/6.2/$basearch/sites/School/RPMS/
+enabled=0
+gpgcheck=1
+gpgkey=http://downloads.naulinux.ru/pub/NauLinux/RPM-GPG-KEY-linux-ink
+'''
+$ sudo yum --enablerepo=naulinux-school install electronics-menu
+$ sudo rpm -ivh /root/rpmbuild/RPMS/x86_64/fritzing-0.9.2b-18.el7.x86_64.rpm
+$ sudo rpm -ivh /root/rpmbuild/RPMS/x86_64/fritzing-debuginfo-0.9.2b-18.el7.x86_64.rpm
+$ Fritzing #起動
