@@ -265,3 +265,16 @@ $ sudo yum --enablerepo=naulinux-school install electronics-menu
 $ sudo rpm -ivh /root/rpmbuild/RPMS/x86_64/fritzing-0.9.2b-18.el7.x86_64.rpm
 $ sudo rpm -ivh /root/rpmbuild/RPMS/x86_64/fritzing-debuginfo-0.9.2b-18.el7.x86_64.rpm
 $ Fritzing #起動
+
+# google chromeの導入
+$ sudo vi /etc/yum.repos.d/google-chrome.repo
+# 以下を書き込む（終了は:wq）
+'''
+[google-chrome]
+name=google-chrome
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+'''
+$ sudo yum install -y google-chrome-stable
